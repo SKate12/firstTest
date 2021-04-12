@@ -45,7 +45,7 @@ public class FourSectionTest {
         for (String hrefSection : sectionHref) {
             //пришлось добавить т.к. с первого раза не нажимается
             while (!driver.findElement(By.xpath("//*[@href ='" + hrefSection + "']/parent::li")).
-                    getAttribute("class").equals("selected")){
+                    getAttribute("class").equals("selected")) {
                 driver.findElement(By.xpath("//*[@href ='" + hrefSection + "']")).click();
             }
             List<WebElement> subSections = driver.findElements(By.xpath("//ul[@class='docs']/li/a"));
@@ -59,7 +59,7 @@ public class FourSectionTest {
                     Assert.assertTrue(driver.findElement(By.xpath("//h1")).isDisplayed());
                 }
             } else {
-               Assert.assertTrue(driver.findElement(By.xpath("//h1")).isDisplayed());
+                Assert.assertTrue(driver.findElement(By.xpath("//h1")).isDisplayed());
             }
         }
     }
@@ -69,9 +69,8 @@ public class FourSectionTest {
         driver.get("http://127.0.0.1/litecart");
         List<WebElement> productCards = driver.findElements(By.xpath("//li[contains(@class,'product')]"));
         for (WebElement productCard : productCards) {
-            int sizeStickerSale = productCard.findElements(By.xpath("a//div[@class = 'sticker sale']")).size();
-            int sizeStickerNew = productCard.findElements(By.xpath("a//div[@class = 'sticker new']")).size();
-            Assert.assertEquals(1, sizeStickerNew + sizeStickerSale);
+            int sizeSticker = productCard.findElements(By.xpath("a//div[contains(@class ,'sticker')]")).size();
+            Assert.assertEquals(1, sizeSticker);
         }
     }
 
