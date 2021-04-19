@@ -44,7 +44,7 @@ public class SixthSection12Test {
         driver.findElement(By.xpath("//*[text()=' Add New Product']")).click();
 
         String newProdName = "Apple" + CommonMethods.getRandomNumber(4);
-
+        sleep(3000);
         driver.findElement(By.xpath("//input[@type='radio']")).click();
         driver.findElement(By.xpath("//input[@name='name[en]']")).sendKeys(newProdName);
         driver.findElement(By.xpath("//input[@name='code']")).sendKeys("Code" + CommonMethods.getRandomNumber(4));
@@ -68,9 +68,6 @@ public class SixthSection12Test {
 
         driver.findElement(By.xpath("//a[@href='#tab-prices']")).click();
         sleep(2000);
-        driver.findElement(By.name("purchase_price")).clear();
-        driver.findElement(By.name("purchase_price")).sendKeys("12,34");
-        driver.findElement(By.xpath("//*[@value='USD']")).click();
 
         driver.findElement(By.name("prices[USD]")).clear();
         driver.findElement(By.name("prices[USD]")).sendKeys("12.34");
@@ -83,6 +80,10 @@ public class SixthSection12Test {
 
         driver.findElement(By.name("gross_prices[EUR]")).clear();
         driver.findElement(By.name("gross_prices[EUR]")).sendKeys("2.3");
+
+        driver.findElement(By.name("purchase_price")).clear();
+        driver.findElement(By.name("purchase_price")).sendKeys("12,34");
+        driver.findElement(By.xpath("//*[@value='USD']")).click();
 
         driver.findElement(By.name("save")).click();
 
