@@ -54,17 +54,28 @@ public class SevenSection13Test {
         }
 
         driver.findElement(By.xpath("//a[text()='Checkout »']")).click();
-        wait.until(visibilityOfAllElements(driver.findElements(By.xpath("//tr/td[text()='1']"))));
+        wait.until(visibilityOfAllElements(driver.findElements(By.xpath("//tr/td[@class='item']"))));
+        wait.until(visibilityOfAllElements(driver.findElements(By.xpath("//li[@class='shortcut']"))));
 
-        for (int i = 0; i < 3; i++) {
-            List<WebElement> quantityListBefore = driver.findElements(By.xpath("//tr/td[text()='1']"));
-            sleep(2000);
-            driver.findElement(By.xpath("//button[text()='Remove']")).click();
-            sleep(2000);
-            List<WebElement> quantityListAfter = driver.findElements(By.xpath("//tr/td[text()='1']"));
-            Assert.assertTrue(quantityListBefore.size() > quantityListAfter.size());
-            sleep(2000);
+        int size = driver.findElements(By.xpath("//li[@class='shortcut']")).size();
+        for (int i = 0; i < size - 1; i++) {
+            driver.findElement(By.xpath("//li[@class='shortcut']")).click();
+            driver.findElement(By.xpath("//li[@class='shortcut']")).click();
+            driver.findElement(By.xpath("//li[@class='shortcut']")).click();
+            int sizeBefore = driver.findElements(By.xpath("//tr/td[@class='item']")).size();
+            Assert.assertEquals(sizeBefore, driver.findElements(By.xpath("//li[@class='shortcut']")).size());
+            WebElement removeButton = driver.findElement(By.xpath("//button[text()='Remove']"));
+            WebElement item = driver.findElement(By.xpath("//tr/td[@class='item']"));
+            removeButton.click();
+            wait.until(stalenessOf(removeButton));
+            wait.until(stalenessOf(item));
         }
+        Assert.assertEquals(1, driver.findElements(By.xpath("//tr/td[@class='item']")).size());
+        WebElement removeButton = driver.findElement(By.xpath("//button[text()='Remove']"));
+        WebElement item = driver.findElement(By.xpath("//tr/td[@class='item']"));
+        removeButton.click();
+        wait.until(stalenessOf(removeButton));
+        wait.until(stalenessOf(item));
     }
 
     @After
