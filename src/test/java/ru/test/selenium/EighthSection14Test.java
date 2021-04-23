@@ -10,10 +10,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
@@ -27,7 +29,6 @@ public class EighthSection14Test {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
-        options.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "eager");
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         wait = new WebDriverWait(driver, 10);
@@ -53,10 +54,23 @@ public class EighthSection14Test {
 
         for (int i = 4; i < s.size(); i++) {
             String currentUrlMainPage = driver.getCurrentUrl();
+
+            Set<String> oldWindowsSet = driver.getWindowHandles();
             driver.findElement(By.xpath("//a[@href='" + s.get(i) + "']")).click();
-            ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-            driver.switchTo().window(tabs.get(1));
+
+            String newWindowHandle = (new WebDriverWait(driver, 10))
+                    .until(new ExpectedCondition<String>() {
+                               public String apply(WebDriver driver) {
+                                   Set<String> newWindowsSet = driver.getWindowHandles();
+                                   newWindowsSet.removeAll(oldWindowsSet);
+                                   return newWindowsSet.size() > 0 ?
+                                           newWindowsSet.iterator().next() : null;
+                               }
+                           }
+                    );
+            driver.switchTo().window(newWindowHandle);
             driver.close();
+            ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
             driver.switchTo().window(tabs.get(0));
             Assert.assertEquals(driver.getCurrentUrl(), currentUrlMainPage);
         }
